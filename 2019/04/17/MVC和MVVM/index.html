@@ -1,28 +1,247 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <title>Hexo</title>
-  <link rel="icon" href="favicon.ico">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="/css/ionicons.min.css">
-  <link rel="stylesheet" href="/css/milligram.min.css">
-  <link rel="stylesheet" href="/css/comfortaa.css">
-  <link rel="stylesheet" href="/css/source-sans-pro.css">
-  <link rel="stylesheet" href="/css/animate.min.css">
-  <link rel="stylesheet" href="/css/nprogress.css">
-  <link rel="stylesheet" href="/css/loaders.min.css">
-  <link rel="stylesheet" href="/css/atom-one-light.css">
-  <link rel="stylesheet" href="/css/app.css">
-</head>
-<body>
-  <div id="app"></div>
-  <script type="text/javascript">
-    window.root = "/"
-  </script>
-  <script src="/js/manifest.js"></script>
-  <script src="/js/vendor.js"></script>
-  <script src="/js/app.js"></script>
-</body>
-</html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>MVC&amp;MVVM | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+      <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/js/google-code-prettify/tomorrow-night-eighties.min.css">
+
+  </head>
+
+  <body>
+</body></html>
+<header>
+	<a id="logo" href="/" title="Hexo">
+	<img src="/favicon.png" alt="Hexo"></a>
+	
+	
+		<!--搜索栏-->
+		<i class="js-toggle-search iconfont icon-search"></i>
+
+
+<form class="js-search search-form search-form--modal" method="get" action="http://gushi.li" role="search">
+	<div class="search-form__inner">
+		<div>
+			<i class="iconfont icon-search"></i>
+			<input class="text-input" placeholder="Enter Key..." type="search">
+		</div>
+	</div>
+</form>
+	
+
+	
+		<!--侧边导航栏-->
+		<a id="nav-toggle" href="#"><span></span></a>
+
+<nav>
+	<div class="menu-top-container">
+		<ul id="menu-top" class="menu">
+			
+				
+				<li class="current-menu-item">
+					<a href="http://weibo.com/" target="_blank">Weibo</a>
+				</li>
+			
+		</ul>
+	</div>
+</nav>
+	
+
+</header>
+<div class="m-header ">
+	<section id="hero1" class="hero">
+		<div class="inner">
+		</div>
+	</section>
+	
+		<figure class="top-image" data-enable="true"></figure>
+	
+</div>
+
+<!--文章列表-->
+<div class="wrapper">
+  
+    <!--文章-->
+<article>
+	
+  
+    <h1 class="post-title" itemprop="name">
+      MVC&amp;MVVM
+    </h1>
+  
+
+	<div class="post-body mb">
+		<h1 id="MVC-amp-MVVM"><a href="#MVC-amp-MVVM" class="headerlink" title="MVC &amp; MVVM"></a>MVC &amp; MVVM</h1><h6 id="2019-04-17-00-04-26-tw-1f31f"><a href="#2019-04-17-00-04-26-tw-1f31f" class="headerlink" title="2019-04-17 00:04:26 :tw-1f31f:"></a>2019-04-17 00:04:26 :tw-1f31f:</h6><hr>
+<p>MVC，MVP以及MVVM，作为当下最流行的三种架构模式，应用广泛，使用频繁。<br>估为了深一步的学习和理解不同架构模式的优缺以及异同，写下此文。</p>
+<h2 id="MVC是什么"><a href="#MVC是什么" class="headerlink" title="MVC是什么"></a>MVC是什么</h2><h5 id="MVC是Model-View-Controller的缩写，它将应用程序划分为三个部分："><a href="#MVC是Model-View-Controller的缩写，它将应用程序划分为三个部分：" class="headerlink" title="MVC是Model-View-Controller的缩写，它将应用程序划分为三个部分："></a>MVC是Model-View-Controller的缩写，它将应用程序划分为三个部分：</h5><ul>
+<li><p>Model: 模型（用于封装与应用程序的业务逻辑相关的数据以及对数据的处理方法）</p>
+</li>
+<li><p>View: 视图（渲染页面）</p>
+</li>
+<li><p>Controller: 控制器（M和V之间的连接器，用于控制应用程序的流程，及页面的业务逻辑）</p>
+</li>
+</ul>
+<h5 id="在MVC中，允许在不改变视图VIEW的情况下，改变用户对视图输入的响应方式，根据用户对VIEW的操作，调用Controlle来处理，而在在CONTOROLLER中响应VIEW的事件，调用MODEL的接口对数据进行操作，只要MODEL发生变化，就像应给相关的视图进行更新操作。"><a href="#在MVC中，允许在不改变视图VIEW的情况下，改变用户对视图输入的响应方式，根据用户对VIEW的操作，调用Controlle来处理，而在在CONTOROLLER中响应VIEW的事件，调用MODEL的接口对数据进行操作，只要MODEL发生变化，就像应给相关的视图进行更新操作。" class="headerlink" title="在MVC中，允许在不改变视图VIEW的情况下，改变用户对视图输入的响应方式，根据用户对VIEW的操作，调用Controlle来处理，而在在CONTOROLLER中响应VIEW的事件，调用MODEL的接口对数据进行操作，只要MODEL发生变化，就像应给相关的视图进行更新操作。"></a>在MVC中，允许在不改变视图VIEW的情况下，改变用户对视图输入的响应方式，根据用户对VIEW的操作，调用Controlle来处理，而在在CONTOROLLER中响应VIEW的事件，调用MODEL的接口对数据进行操作，只要MODEL发生变化，就像应给相关的视图进行更新操作。</h5><p><strong>假设在原生的html+js的页面中，html上的布局代码看作是VIEW层，而js的逻辑代码看成是Controller层，当用户在html上进行了操作时，js响应了html的操作，也就是事件的监听，最后调用Model层（例如Ajax）完成对数据的修改，最后再反馈到View（html页面）上去，便完成了MVC的工作。</strong></p>
+<hr>
+<h5 id="一般来说，在MVC里的三层模型中，所有通信都是单向的。"><a href="#一般来说，在MVC里的三层模型中，所有通信都是单向的。" class="headerlink" title="一般来说，在MVC里的三层模型中，所有通信都是单向的。"></a>一般来说，在MVC里的三层模型中，所有通信都是单向的。</h5><p><img src="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020105.png" alt="Pandao editor.md"></p>
+<h6 id="1-View-传送指令到-Controller"><a href="#1-View-传送指令到-Controller" class="headerlink" title="1. View 传送指令到 Controller"></a>1. View 传送指令到 Controller</h6><h6 id="2-Controller-完成业务逻辑后，要求-Model-改变状态"><a href="#2-Controller-完成业务逻辑后，要求-Model-改变状态" class="headerlink" title="2. Controller 完成业务逻辑后，要求 Model 改变状态"></a>2. Controller 完成业务逻辑后，要求 Model 改变状态</h6><h6 id="3-Model-将新的数据发送到-View，用户得到反馈"><a href="#3-Model-将新的数据发送到-View，用户得到反馈" class="headerlink" title="3. Model 将新的数据发送到 View，用户得到反馈"></a>3. Model 将新的数据发送到 View，用户得到反馈</h6><p>但在实际的开发中，往往因为不同的需求而做灵活的改变。<br><a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html</a></p>
+<p>##MVC的缺点</p>
+<ol>
+<li><p>花费大量时间将MVC应用到规模并不是很大的应用程序通常会得不偿失。【这个是最明显的缺点，例如我们仅仅需要到数据库查信息，如果不分层设计我们可以直接从视图型层到模型去访问，效率上会有所提高，如果以代码的复杂性为代价，多了一层，代码量大大增加，在这个时候就降低了开发效率】</p>
+</li>
+<li><p>视图对模型数据的低效率访问。依据模型操作接口的不同，视图可能需要多次调用才能获得足够的显示数据。对未变化数据的不必要的频繁访问，也将损害操作性能。【例如，页面的有一部分数据我并没有更新，但是提交到模型层照样会去获得返回显示 】</p>
+</li>
+<li><p>视图与控制器是相互分离，但却是联系紧密的部件，视图没有控制器的存在，其应用是很有限的，反之亦然，这样就妨碍了他们的独立重用。【例如，不可能总是在jsp页面中直接访问模型，一般放在逻辑控制层进行处理，servlet】</p>
+</li>
+</ol>
+<p><a href="https://blog.csdn.net/sunforraining/article/details/79015080" target="_blank" rel="noopener">https://blog.csdn.net/sunforraining/article/details/79015080</a><br><br></p>
+<h2 id="MVVM是什么"><a href="#MVVM是什么" class="headerlink" title="MVVM是什么"></a>MVVM是什么</h2><h5 id="MVVM和MVC模型的最大区别是：实现了View和Model的数据的双向绑定，也就是说，当MODEL的属性发生改变是，我们不再自己手动的操作DOM，而是改变之后的属性对应的VIEW层会自动的发生改变。"><a href="#MVVM和MVC模型的最大区别是：实现了View和Model的数据的双向绑定，也就是说，当MODEL的属性发生改变是，我们不再自己手动的操作DOM，而是改变之后的属性对应的VIEW层会自动的发生改变。" class="headerlink" title="MVVM和MVC模型的最大区别是：实现了View和Model的数据的双向绑定，也就是说，当MODEL的属性发生改变是，我们不再自己手动的操作DOM，而是改变之后的属性对应的VIEW层会自动的发生改变。"></a>MVVM和MVC模型的最大区别是：实现了View和Model的数据的双向绑定，也就是说，当MODEL的属性发生改变是，我们不再自己手动的操作DOM，而是改变之后的属性对应的VIEW层会自动的发生改变。</h5><h5 id="View-和-Model-之间没有联系，通-ViewModel-进行交互，而且-Model-和-ViewModel-之间的交互是双向的，因此视图的数据改变会同时修改数据源，而数据源的数据变化也会立即反映到-View-上。"><a href="#View-和-Model-之间没有联系，通-ViewModel-进行交互，而且-Model-和-ViewModel-之间的交互是双向的，因此视图的数据改变会同时修改数据源，而数据源的数据变化也会立即反映到-View-上。" class="headerlink" title="View 和 Model 之间没有联系，通 ViewModel 进行交互，而且 Model 和 ViewModel 之间的交互是双向的，因此视图的数据改变会同时修改数据源，而数据源的数据变化也会立即反映到 View 上。"></a>View 和 Model 之间没有联系，通 ViewModel 进行交互，而且 Model 和 ViewModel 之间的交互是双向的，因此视图的数据改变会同时修改数据源，而数据源的数据变化也会立即反映到 View 上。</h5><hr>
+<h4 id="在VUE中"><a href="#在VUE中" class="headerlink" title="在VUE中"></a>在VUE中</h4><pre><code class="html">&lt;div id=&quot;app-5&quot;&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+  &lt;button v-on:click=&quot;addnum&quot;&gt;数字自增&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="html">var app5 = new Vue({
+  el: &#39;#app-5&#39;,
+  data: {
+    message: 1
+  },
+  methods: {
+      addnum: function () {
+      this.message = this.message++；
+    }
+  }
+})
+
+</code></pre>
+<pre><code>这里的html部分相当于View层，当ViewModel对Model进行更新时，通过数据绑定更新到View。
+Vue实例中的data相当于Model层，而ViewModel层的核心是Vue中的双向数据绑定，即Model变化时VIew可以实时更新，View变化也能让Model发生变化。
+</code></pre><hr>
+<h5 id="在MVVM中，利用数据的双向数据绑定，view层和model层并没有发生直接的联系，当model层数据发生更新的时候，也不用手动的去操作Dom元素，这样咋很大程度上精简了代码，也提高了代码的可重用性。"><a href="#在MVVM中，利用数据的双向数据绑定，view层和model层并没有发生直接的联系，当model层数据发生更新的时候，也不用手动的去操作Dom元素，这样咋很大程度上精简了代码，也提高了代码的可重用性。" class="headerlink" title="在MVVM中，利用数据的双向数据绑定，view层和model层并没有发生直接的联系，当model层数据发生更新的时候，也不用手动的去操作Dom元素，这样咋很大程度上精简了代码，也提高了代码的可重用性。"></a>在MVVM中，利用数据的双向数据绑定，view层和model层并没有发生直接的联系，当model层数据发生更新的时候，也不用手动的去操作Dom元素，这样咋很大程度上精简了代码，也提高了代码的可重用性。</h5>
+	</div>
+	<div class="meta split">
+		
+			<span>本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+		
+		<time class="post-date" datetime="2019-04-17T00:55:29.000Z" itemprop="datePublished">2019-04-17</time>
+	</div>
+</article>
+
+<!--评论-->
+
+	
+<div class="ds-thread" data-thread-key="MVC和MVVM" data-title="MVC&amp;MVVM" data-url="https://hengge1226.github.io/2019/04/17/MVC和MVVM/"></div>
+<script type="text/javascript">
+
+var duoshuoQuery = {short_name:"yumemor"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+  
+</div>
+
+
+  <svg id="bigTriangleColor" width="100%" height="40" viewbox="0 0 100 102" preserveaspectratio="none">
+    <path d="M0 0 L50 100 L100 0 Z"/>
+  </svg>
+
+  
+
+
+  <div class="wrapper"></div>
+
+
+
+
+
+<div class="fat-footer">
+	<div class="wrapper">
+		<div class="layout layout--center">
+			<div class="layout__item palm-mb">
+				<div class="media">
+					<img class="headimg" src="https://imgchr.github.la/steve.jpeg" alt="ygh">
+					<div class="media__body">
+						<h4>justpsvm</h4>
+						<p class="site-description">Stay Hungry,Stay Foolish.</p>
+					</div>
+				</div>
+				<div class="author-contact">
+					<ul>
+						
+							
+							<li>
+				        		<a href="http://weibo.com/" target="_blank">
+				        			
+				        				<i class="iconfont icon-weibo"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://github.com/" target="_blank">
+				        			
+				        				<i class="iconfont icon-github"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://www.zhihu.com/" target="_blank">
+				        			
+										<i class="iconfont icon-zhihu"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer" role="contentinfo">
+	<div class="wrapper wrapper--wide split split--responsive">
+		
+			<span>本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次</span>
+		
+		<span>Theme by <a href="http://github.com/justpsvm">justpsvm</a>. Powered by <a href="http://hexo.io">Hexo</a></span>
+	</div>
+</footer>
+
+	<!-－这里导入了 lib.js 里面涵盖了 jQuery 等框架 所以注释掉-->
+	<!--<script src="http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js"></script>-->
+	<script src="/js/lib.js"></script>
+	<script src="/js/google-code-prettify/prettify.js"></script>
+	<script src="/js/module.js"></script>
+	<script src="/js/script.js"></script>
+	
+		<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+	<script type="text/javascript">
+		//代码高亮
+		$(document).ready(function(){
+	 		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   			prettyPrint();
+		});
+	</script>
+	
+
