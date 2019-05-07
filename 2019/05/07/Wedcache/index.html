@@ -99,11 +99,13 @@
 <li>因为大部分的请求都在边缘的节点完成，起到了分流的作用，所以大大减轻了源站的压力。</li>
 </ul>
 <hr>
+<p><br></p>
 <h4 id="二-DNS缓存"><a href="#二-DNS缓存" class="headerlink" title="二. DNS缓存"></a>二. DNS缓存</h4><p><strong><em>DNS是个什么东西？</em></strong></p>
 <p>首先DNS是指将域名URL转化为服务器的主机IP，在DNS查询解析的过程中，浏览器什么都做不了，保持空白的页面，所以提升DNS的查询速度也是前端的优化之一。</p>
 <p>而<strong>DNS缓存</strong>就是优化方式之一，对DNS进行缓存可以减少重复的查找，提升网页的打开速度，但是缓存时间过长，也会容易造成访问的正确率下降，没办法及时检测到服务器的IP变化。</p>
-<p><em>（当然对DNS进行优化并不止缓存这一种方式，DNS预解析也是一种很好的方式，当你浏览网页时，浏览器会在加载网页时对网页中的域名进行解析缓存，这样在你单击当前网页中的连接时就无需进行DNS的解析，减少用户等待时间，提高用户体验。）</em></p>
+<p><em>（当然对DNS进行优化并不止缓存这一种方式，DNS预解析也是一种很好的方式，当你浏览网页时，浏览器会在加载网页时对网页中的域名进行解析缓存，这样在你单击当前网页中的连接时就无需进行DNS的解析，减少用户等待时间，提高用户体验。）</em><br><br></p>
 <hr>
+<p><br></p>
 <h4 id="三-客户端缓存（强缓存和协商缓存）"><a href="#三-客户端缓存（强缓存和协商缓存）" class="headerlink" title="三. 客户端缓存（强缓存和协商缓存）"></a>三. 客户端缓存（强缓存和协商缓存）</h4><p><strong><em>客户端缓存是个什么东西？</em></strong></p>
 <p>客户端缓存是 缓存的最后一层，是直接面对客户端的客户端缓存。通常也把这部分称为web缓存。web缓存位于客户端。缓存会根据进来的请求保存输出内容的复本，例如html页面、图片文件等，然后，当下一个请求来到时，如果是相同的URL，缓存直接使用复本相应请求访问，而不是向源服务器再次发送请求。</p>
 <p><strong><em>缓存策略如下</em></strong></p>
@@ -117,17 +119,12 @@
 <p>​    b、存在该缓存结果和缓存标识，但该结果已失效，强制缓存失败，则使用协商缓存。</p>
 <p>​    c、存在该缓存结果和缓存标识，且该结果尚未失效，强制缓存生效，直接返回该结果。(没有向服务器发起请求，浏览器直接返回200，并直接从本地缓存中读取资源)</p>
 </li>
-</ol>
-<ol start="4">
-<li><p>​    当缓存标识存在且过期的时候，便需要使用协商缓存，如果存在Etag，则校验If-None-Match，</p>
-<p>​    如果存在Last-Modified,则校验，If-Modified-Since，</p>
-<p>​    如果一致，服务器返回304，浏览器直接从缓存中读取资源，若未命中缓存，服务器返回资源，</p>
-<p>​    并对Etag和Last-Modified进行更新。</p>
+<li><p>当缓存标识存在且过期的时候，便需要使用协商缓存，如果存在Etag，则校验If-None-Match，<br>如果存在Last-Modified,则校验，If-Modified-Since，<br>​如果一致，服务器返回304，浏览器直接从缓存中读取资源，若未命中缓存，服务器返回资源，并对Etag和Last-Modified进行更新。</p>
 </li>
 </ol>
 <p><img src="https://img-blog.csdn.net/20170502184012463?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbm1pbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
 <hr>
-<p><strong>Q1:为什么last-modified还要有etags？*</strong></p>
+<p><br><br><br><br><strong>Q1:为什么last-modified还要有etags？*</strong></p>
 <p>1、last-modified的时间只能精确到秒，如果资源修改得比较频繁，频率在秒以下时，就出现了偏差。</p>
 <p>2、当存在周期性重写某些资源，但资源实际内容并未发生改变，或修改的内容并不重要如注释等，就应当使用Etag。</p>
 <p><strong><em>Q2:Etag的缺点？</em></strong></p>
@@ -135,7 +132,7 @@
 <p><strong><em>Q3:强缓存和协商缓存的区别？</em></strong></p>
 <p><strong>强缓存</strong>：客户端第一次问服务器要某个资源时，服务器丢还给客户端所请求的这个资源同时， 告      诉客户端将这个资源保存在本地，并且在未来的某个时点之前如果还需要这个资源，直接从本地获      取就行了， 不用向服务器请求。这种方式缓存下来的资源称为强缓存。</p>
 <p><strong>协商缓存</strong>：客户端第一次问服务器要某个资源时，服务器丢还给客户端所请求的这个资源同时，将该资源的一些信息也返回给客户端，告诉客户端将这个资源缓存在本地。当客户端下一次需要这个资源时，将请求以及相关信息一并发送给服务器，由服务器来判断客户端缓存的资源是否需要更新：如不需要更新，就直接告诉客户端获取本地缓存资源（304）； 如需要更新，则将最新的资源连同相应的信息一并返回给客户端。</p>
-<p><strong>参考文章：</strong></p>
+<p><br><br><strong>参考文章：</strong></p>
 <ul>
 <li><a href="https://blog.csdn.net/shenmill/article/details/71080926" target="_blank" rel="noopener">https://blog.csdn.net/shenmill/article/details/71080926</a></li>
 <li><em><a href="https://www.jianshu.com/p/5391052d5382" target="_blank" rel="noopener">https://www.jianshu.com/p/5391052d5382</a></em> </li>
