@@ -119,7 +119,7 @@
 <p>​    b、存在该缓存结果和缓存标识，但该结果已失效，强制缓存失败，则使用协商缓存。</p>
 <p>​    c、存在该缓存结果和缓存标识，且该结果尚未失效，强制缓存生效，直接返回该结果。(没有向服务器发起请求，浏览器直接返回200，并直接从本地缓存中读取资源)</p>
 </li>
-<li><p>当缓存标识存在且过期的时候，便需要使用协商缓存，如果存在Etag，则校验If-None-Match，<br>如果存在Last-Modified,则校验，If-Modified-Since，<br>​如果一致，服务器返回304，浏览器直接从缓存中读取资源，若未命中缓存，服务器返回资源，并对Etag和Last-Modified进行更新。<br><img src="https://imgchr.com/i/ETjV1A" alt></p>
+<li><p>当缓存标识存在且过期的时候，便需要使用协商缓存，如果存在Etag，则校验If-None-Match，<br>如果存在Last-Modified,则校验，If-Modified-Since，<br>​如果一致，服务器返回304，浏览器直接从缓存中读取资源，若未命中缓存，服务器返回资源，并对Etag和Last-Modified进行更新。<br><img src="../../../../img/cache.png" alt></p>
 </li>
 </ol>
 <hr>
