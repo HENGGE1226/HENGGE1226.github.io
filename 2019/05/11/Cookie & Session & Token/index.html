@@ -112,7 +112,7 @@
 <hr>
 <p><br></p>
 <h4 id="四、Cookie-amp-Session的安全问题"><a href="#四、Cookie-amp-Session的安全问题" class="headerlink" title="四、Cookie &amp; Session的安全问题"></a>四、Cookie &amp; Session的安全问题</h4><p><em>在使用Cookie &amp; Session机制来进行客户端身份验证的时候，遭受CSRF攻击便成为了一个需要解决的问题。</em></p>
-<h5 id="那么，什么是CSRF攻击？"><a href="#那么，什么是CSRF攻击？" class="headerlink" title="那么，什么是CSRF攻击？"></a><strong>那么，什么是CSRF攻击？</strong></h5><p><img src="https://segmentfault.com/img/bV867x?w=1462&amp;h=1206" alt></p>
+<h5 id="那么，什么是CSRF攻击？"><a href="#那么，什么是CSRF攻击？" class="headerlink" title="那么，什么是CSRF攻击？"></a><strong>那么，什么是CSRF攻击？</strong></h5><p><img src="./../img/cookie.png" alt="Pandao editor.md"></p>
 <p><strong>面对CSRF攻击，主要的防御措施有：</strong></p>
 <ul>
 <li>检查referer字段。HTTP头中有一个Referer字段，这个字段是用来标明请求来源于哪一个网址。通常来说，Referer字段应和请求的地址是在同一个域名下的。服务器可以通过判断Referer字段来判断请求的来源。 这种方法简单易行，但也有其局限性。http协议无法保证来访的浏览器的具体实现，可以通过篡改Referer字段的方式来进行攻击。</li>
