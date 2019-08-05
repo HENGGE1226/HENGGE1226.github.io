@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>基于Proxy实现Vue的双向数据绑定 | HengGe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+      <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/js/google-code-prettify/tomorrow-night-eighties.min.css">
+
+  </head>
+
+  <body>
+</body></html>
+<header>
+	<a id="logo" href="/" title="HengGe">
+	<img src="/favicon.png" alt="HengGe"></a>
+	
+	
+		<!--搜索栏-->
+		<i class="js-toggle-search iconfont icon-search"></i>
+
+
+<form class="js-search search-form search-form--modal" method="get" action="http://gushi.li" role="search">
+	<div class="search-form__inner">
+		<div>
+			<i class="iconfont icon-search"></i>
+			<input class="text-input" placeholder="Enter Key..." type="search">
+		</div>
+	</div>
+</form>
+	
+
+	
+		<!--侧边导航栏-->
+		<a id="nav-toggle" href="#"><span></span></a>
+
+<nav>
+	<div class="menu-top-container">
+		<ul id="menu-top" class="menu">
+			
+				
+				<li class="current-menu-item">
+					<a href="https://hengge1226.github.io/2019/04/17/MVC&amp;MVVM/" target="_self">MVC &amp; MVVM</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/07/Wedcache/" target="_self">前端缓存浅谈</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/11/Cookie &amp; Session &amp; Token/" target="_self">Cookie &amp; Session &amp; Token</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/15/JS-Inherit/" target="_self">论JS继承</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/07/21/WebSecurity/" target="_self">前端安全问题防范</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/08/05/基于Proxy实现Vue的双向绑定/" target="_self">前端安全问题防范</a>
+				</li>
+			
+		</ul>
+	</div>
+</nav>
+	
+
+</header>
+<div class="m-header ">
+	<section id="hero1" class="hero">
+		<div class="inner">
+		</div>
+	</section>
+	
+		<figure class="top-image" data-enable="true"></figure>
+	
+</div>
+
+<!--文章列表-->
+<div class="wrapper">
+  
+    <!--文章-->
+<article>
+	
+  
+    <h1 class="post-title" itemprop="name">
+      基于Proxy实现Vue的双向数据绑定
+    </h1>
+  
+
+	<div class="post-body mb">
+		<h2 id="基于Proxy实现Vue的双向数据绑定"><a href="#基于Proxy实现Vue的双向数据绑定" class="headerlink" title="基于Proxy实现Vue的双向数据绑定"></a>基于Proxy实现Vue的双向数据绑定</h2><p>在得知Vue3.0中将使用Proxy取代现有的Object.defineProperty之后，我便去学习了Proxy和Reflect这两个ES6的新特性，</p>
+<p>也顺带了解了使用Proxy取代Object.defineProperty的原因，最后自己动手实现了基于Proxy实现Vue的双向数据绑定。</p>
+<p>此文用作总结。</p>
+<p><u>vue2.x在实现观察者机制的时候，使用的是对象的Object.defineProperty属性，它可以对一个对象的属性进行监控，</u></p>
+<p><u>对属性的默认方法进行改写，然后达到监控属性变化的效果。但是Object.defineProperty有两个缺点：</u></p>
+<ul>
+<li><p><strong>Object.defineProperty无法监控到数组下标的变化，导致直接通过数组的下标给数组设置值，不能实时响应。</strong> </p>
+<p><strong>为了解决这个问题，经过vue内部处理后可以使用以下几种方法来监听数组。</strong></p>
+</li>
+<li><p><strong>Object.defineProperty只能劫持对象的属性,因此我们需要对每个对象的每个属性进行遍历。</strong></p>
+<p><strong>Vue 2.x里，是通过 递归 + 遍历 data 对象来实现对数据的监控的，如果属性值也是对象那么需要深度遍历,</strong></p>
+<p><strong>显然如果能劫持一个完整的对象是才是更好的选择。</strong></p>
+</li>
+</ul>
+<p>和Object.defineProperty不同的是，</p>
+<p><u>Proxy可以劫持整个对象，并返回一个新的对象。</u></p>
+<p><u>Proxy有13种劫持操作。(get，set，has,deleteProperty,ownKeys,getOwnPropertyDescriptor等等)</u></p>
+<p><br></p>
+<h3 id="那么什么是Proxy呢？"><a href="#那么什么是Proxy呢？" class="headerlink" title="那么什么是Proxy呢？"></a>那么什么是Proxy呢？</h3><p><strong>proxy用于修改某些操作的默认行为，也可以理解为在目标对象前面设一层拦截，外部的所有访问都必须通过这层拦截</strong>。</p>
+<p>proxy会返回一个对象A，这个对象就是用户与源对象B的一个中介，当用户对A进行操作时，都会实现A里面的逻辑（大部分都是对一些操作的改写），然后间接地对源对象进行改写。</p>
+<p>例如：</p>
+<pre><code class="js">    let objA = {a: 1};
+
+    let objB = new Proxy(objA,{
+        set: function(target,key,value){
+            target[key] = value *2;
+        }
+    })
+    console.log(objB.a); // 1
+    objB.a = 4;
+    console.log(objB.a); //8
+    console.log(objA.a); //8
+</code></pre>
+<h3 id="那么什么是Reflect呢？"><a href="#那么什么是Reflect呢？" class="headerlink" title="那么什么是Reflect呢？"></a>那么什么是Reflect呢？</h3><p>Reflect是ES6为操作对象而提供的新API,而这个API设计的目的只要有：</p>
+<ul>
+<li>将Object对象的一些属于语言内部的方法放到Reflect对象上，从Reflect上能拿到语言内部的方法</li>
+<li>修改某些object方法返回的结果</li>
+<li>让Object的操作都变成函数行为</li>
+<li>Reflect对象的方法与Proxy对象的方法一一对应，只要proxy对象上有的方法reflect也能找到</li>
+</ul>
+<p>简而言之，Reflect就是一种操作对象的新方法，他可以让让Object的操作都变成函数行为，也可以改写方法返回的结果。</p>
+<p><u></u></p>
+<p><br></p>
+<h3 id="正题：基于Proxy实现Vue的双向数据绑定"><a href="#正题：基于Proxy实现Vue的双向数据绑定" class="headerlink" title="正题：基于Proxy实现Vue的双向数据绑定"></a>正题：基于Proxy实现Vue的双向数据绑定</h3><p>首先，建立基本的dom元素，并实现垂直水平居中样式：</p>
+<pre><code class="html">&lt;style&gt;
+#app{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+
+&lt;/style&gt;
+&lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+        &lt;input type=&quot;text&quot; id=&quot;input&quot; /&gt;&lt;button type=&quot;button&quot; name=&quot;button&quot; id=&quot;btn&quot;&gt;添加&lt;/button&gt;
+        &lt;div&gt;您输入的是：&lt;span id=&quot;text&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+        &lt;ul id=&quot;list&quot;&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+<p>然后，让输入框和文本做到数据绑定。</p>
+<pre><code class="js">    var obj = {};
+    var input = document.getElementById(&#39;input&#39;);
+    var text = document.getElementById(&#39;text&#39;)
+
+    let newObj = new Proxy(obj,{
+        get: function(target,key,receiver) {
+            console.log(&#39;I GOT IT&#39;);
+            return Reflect.get(target,key,receiver);
+        },
+        set: function(target,    key, value, receiver){
+            if (key === &quot;text&quot;) {
+                  input.value = value;
+                  text.innerHTML = value;
+              }
+              return Reflect.set(target, key, value, receiver);
+        }
+    })
+
+    input.addEventListener(&quot;keyup&quot;, function(e) {
+      newObj.text = e.target.value;
+      });
+</code></pre>
+<p>实现列表渲染的逻辑：</p>
+<pre><code class="js">    const Render = {
+      // 初始化
+      init: function(arr) {
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i &lt; arr.length; i++) {
+          const li = document.createElement(&quot;li&quot;);
+          li.textContent = arr[i];
+          fragment.appendChild(li);
+        }
+        list.appendChild(fragment);
+      },
+      addList: function(val) {
+        const li = document.createElement(&quot;li&quot;);
+        li.textContent = val;
+        list.appendChild(li);
+      }
+  };
+</code></pre>
+<p>最后监听list数组的变化，当用户按下添加键时，触发Render的addList方法：</p>
+<pre><code class="js">const arr = [];
+  // 监听数组
+  const newArr = new Proxy(arr, {
+      get: function(target, key, receiver) {
+        return Reflect.get(target, key, receiver);
+      },
+      set: function(target, key, value, receiver) {
+        console.log(target, key, value, receiver);
+        if (key !== &quot;length&quot;) {
+          Render.addList(value);
+        }
+        return Reflect.set(target, key, value, receiver);
+      }
+    });
+
+    // 初始化
+  window.onload = function() {
+    Render.init(arr);
+  };
+
+  btn.addEventListener(&quot;click&quot;, function() {
+    newArr.push(newObj.text);
+  });
+</code></pre>
+
+	</div>
+	<div class="meta split">
+		
+		<time class="post-date" datetime="2019-08-05T02:50:29.000Z" itemprop="datePublished">2019-08-05</time>
+	</div>
+</article>
+
+<!--评论-->
+
+	
+<div class="ds-thread" data-thread-key="基于Proxy实现Vue的双向绑定" data-title="基于Proxy实现Vue的双向数据绑定" data-url="https://hengge1226.github.io/2019/08/05/基于Proxy实现Vue的双向绑定/"></div>
+<script type="text/javascript">
+
+var duoshuoQuery = {short_name:"yumemor"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+  
+</div>
+
+
+  <svg id="bigTriangleColor" width="100%" height="40" viewbox="0 0 100 102" preserveaspectratio="none">
+    <path d="M0 0 L50 100 L100 0 Z"/>
+  </svg>
+
+  
+
+
+  <div class="wrapper"></div>
+
+
+
+
+
+<div class="fat-footer">
+	<div class="wrapper">
+		<div class="layout layout--center">
+			<div class="layout__item palm-mb">
+				<div class="media">
+					<img class="headimg" src alt>
+					<div class="media__body">
+						<h4>Ye.Guangheng</h4>
+						<p class="site-description">Just Share My Life</p>
+					</div>
+				</div>
+				<div class="author-contact">
+					<ul>
+						
+							
+							<li>
+				        		<a href="http://weibo.com/" target="_blank">
+				        			
+				        				<i class="iconfont icon-weibo"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://github.com/HENGGE1226" target="_blank">
+				        			
+				        				<i class="iconfont icon-github"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer" role="contentinfo">
+	<div class="wrapper wrapper--wide split split--responsive">
+		
+		<span>Theme by <a href="http://github.com/justpsvm">justpsvm</a>. Powered by <a href="http://hexo.io">Hexo</a></span>
+	</div>
+</footer>
+
+	<!-－这里导入了 lib.js 里面涵盖了 jQuery 等框架 所以注释掉-->
+	<!--<script src="http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js"></script>-->
+	<script src="/js/lib.js"></script>
+	<script src="/js/google-code-prettify/prettify.js"></script>
+	<script src="/js/module.js"></script>
+	<script src="/js/script.js"></script>
+	
+	<script type="text/javascript">
+		//代码高亮
+		$(document).ready(function(){
+	 		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   			prettyPrint();
+		});
+	</script>
+	
+
