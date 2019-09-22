@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TCP连接浅谈 | HengGe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+      <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/js/google-code-prettify/tomorrow-night-eighties.min.css">
+
+  </head>
+
+  <body>
+</body></html>
+<header>
+	<a id="logo" href="/" title="HengGe">
+	<img src="/favicon.png" alt="HengGe"></a>
+	
+	
+		<!--搜索栏-->
+		<i class="js-toggle-search iconfont icon-search"></i>
+
+
+<form class="js-search search-form search-form--modal" method="get" action="http://gushi.li" role="search">
+	<div class="search-form__inner">
+		<div>
+			<i class="iconfont icon-search"></i>
+			<input class="text-input" placeholder="Enter Key..." type="search">
+		</div>
+	</div>
+</form>
+	
+
+	
+		<!--侧边导航栏-->
+		<a id="nav-toggle" href="#"><span></span></a>
+
+<nav>
+	<div class="menu-top-container">
+		<ul id="menu-top" class="menu">
+			
+				
+				<li class="current-menu-item">
+					<a href="https://hengge1226.github.io/2019/04/17/MVC&amp;MVVM/" target="_self">MVC &amp; MVVM</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/07/Wedcache/" target="_self">前端缓存浅谈</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/11/Cookie &amp; Session &amp; Token/" target="_self">Cookie &amp; Session &amp; Token</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/05/15/JS-Inherit/" target="_self">论JS继承</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/07/21/WebSecurity/" target="_self">前端安全问题防范</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/08/05/基于Proxy实现Vue的双向绑定/" target="_self">基于Proxy实现Vue的双向绑定</a>
+				</li>
+			
+				
+				<li class="current-menu-item">
+					<a href="/2019/09/22/关于TCP连接/" target="_self">TCP浅谈</a>
+				</li>
+			
+		</ul>
+	</div>
+</nav>
+	
+
+</header>
+<div class="m-header ">
+	<section id="hero1" class="hero">
+		<div class="inner">
+		</div>
+	</section>
+	
+		<figure class="top-image" data-enable="true"></figure>
+	
+</div>
+
+<!--文章列表-->
+<div class="wrapper">
+  
+    <!--文章-->
+<article>
+	
+  
+    <h1 class="post-title" itemprop="name">
+      TCP连接浅谈
+    </h1>
+  
+
+	<div class="post-body mb">
+		<p>关于TCP连接</p>
+<p>TCP的连接问题一直是前端不可避免的问题，所以在学习过程中有必要对这个知识点进行总结。</p>
+<hr>
+<p>TCP是什么？</p>
+<p>众所周知，TCP/IP是最最常见的网络型协议，而TCP在这个协议里面担任的角色便是用于应用程序之间的通信。当应用程序希望通过 TCP 与另一个应用程序通信时，它会发送一个通信请求。这个请求必须被送到一个确切的地址。在双方“握手”之后，TCP 将在两个应用程序之间建立一个全双工 (full-duplex) 的通信。这个全双工的通信将占用两个计算机之间的通信线路，直到它被一方或双方关闭为止。UDP 和 TCP 很相似，但是更简单，同时可靠性低于 TCP。</p>
+<p>（TCP/IP 意味着 TCP 和 IP 在一起协同工作。TCP 负责应用软件（比如你的浏览器）和网络软件之间的通信。IP 负责计算机之间的通信。TCP 负责将数据分割并装入 IP 包，然后在它们到达的时候重新组合它们。IP 负责将包发送至接受者。）</p>
+<p>而TCP又是怎样用三次握手和四次挥手去建立连接和断开连接的呢？</p>
+<hr>
+<p>一、TCP三次握手</p>
+<p>所谓三次握手（Three-Way Handshake）即建立TCP连接，就是指建立一个TCP连接时，需要客户端和服务端总共发送3个包以确认连接的建立。在socket编程中，这一过程由客户端执行connect来触发，整个流程如下图所示：</p>
+<p>(C：客户端，S：服务端)</p>
+<ul>
+<li>第一次握手：C发起TCP连接请求，首先将SYN=1，并且产生一个随机值seq=J，将这个数据包发送给S，随后C进入SYN_SENT状态，等待Server确认。</li>
+<li>第二次握手：当S收到C发来的数据包，知道了C端是希望请求连接的，为了响应这次的连接请求，S端会将SYN=1，ACK=1，ack=J+1，为了标识连接的唯一性，也产生了一个随机值k等于seq。进入SYN_RVCD状态。</li>
+<li>第三次握手：当C端收到S端发送过来的数据包后，先检查ack是否等于J+1，Ack是否等于1，如果是则代表S端已经确认了上次的连接请求，然后将ACK=1，ack=K+1，发送给S端，S端检查这两个值无误后，C和S同时变为ESTABLISHED状态，连接建立。</li>
+</ul>
+<p>三次握手的过程大概就是如此，但是三次握手真的需要三次吗？为什么两次握手不能完成，一定要设计成三次呢？</p>
+<p>假设只有一次握手：</p>
+<p>当C端发送TCP连接请求之后，马上开始发送数据，这显然是不可行的，因为C端都不知道S端有没有正确接收到请求。</p>
+<p>假设只有两次握手：</p>
+<p>当S端发送完确认信息之后，客户端马上开始发送数据，但是因为网络阻塞数据迟迟没有到达服务端，因为客户端是有超时自动关闭连接的功能的，所以一段时间之后，客户端因为没有收到服务端的应答而主动关闭了这次连接。但是如果数据在一段时间之后到达了服务端，服务端正常做出了响应之后，便开始了无限期的等待，这样实际上十分浪费资源的。</p>
+<p>一句话总结就是：</p>
+<p>为了保证服务端能收接受到客户端的信息 并能做出正确的应答而进行前两次(第一次和第二次)握手，为了保证客户端能够接收到服务端的信息 并能做出正确的应答而进行后两次(第二次和第三次)握手。</p>
+<hr>
+<p>二、TCP的四次挥手</p>
+<p>所谓四次挥手，即关闭TCP连接的过程中，客户端和服务端发生的四次交互过程：</p>
+<p>(C：客户端，S：服务端)</p>
+<ul>
+<li><p>第一次挥手：Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。</p>
+</li>
+<li><p>第二次挥手：Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。</p>
+</li>
+<li><p>第三次挥手：Server发送一个FIN，用来关闭Server到Client的数据传送，Server进入LAST_ACK状态。</p>
+</li>
+<li><p>第四次挥手：Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。</p>
+</li>
+</ul>
+<p>为什么建立连接是三次握手，而关闭连接却是四次挥手呢？</p>
+<p>这是因为服务端在LISTEN状态下，收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。而关闭连接时，当收到对方的FIN报文时，仅仅表示对方不再发送数据了但是还能接收数据，己方也未必全部数据都发送给对方了，所以己方可以立即close，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，因此，己方ACK和FIN一般都会分开发送。 </p>
+
+	</div>
+	<div class="meta split">
+		
+		<time class="post-date" datetime="2019-09-22T05:26:29.000Z" itemprop="datePublished">2019-09-22</time>
+	</div>
+</article>
+
+<!--评论-->
+
+	
+<div class="ds-thread" data-thread-key="关于TCP连接" data-title="TCP连接浅谈" data-url="https://hengge1226.github.io/2019/09/22/关于TCP连接/"></div>
+<script type="text/javascript">
+
+var duoshuoQuery = {short_name:"yumemor"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+
+
+  
+</div>
+
+
+  <svg id="bigTriangleColor" width="100%" height="40" viewbox="0 0 100 102" preserveaspectratio="none">
+    <path d="M0 0 L50 100 L100 0 Z"/>
+  </svg>
+
+  
+
+
+  <div class="wrapper"></div>
+
+
+
+
+
+<div class="fat-footer">
+	<div class="wrapper">
+		<div class="layout layout--center">
+			<div class="layout__item palm-mb">
+				<div class="media">
+					<img class="headimg" src alt>
+					<div class="media__body">
+						<h4>Ye.Guangheng</h4>
+						<p class="site-description">Just Share My Life</p>
+					</div>
+				</div>
+				<div class="author-contact">
+					<ul>
+						
+							
+							<li>
+				        		<a href="http://weibo.com/" target="_blank">
+				        			
+				        				<i class="iconfont icon-weibo"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+							
+							<li>
+				        		<a href="https://github.com/HENGGE1226" target="_blank">
+				        			
+				        				<i class="iconfont icon-github"></i>
+				        			
+				        		</a>
+				        	</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer" role="contentinfo">
+	<div class="wrapper wrapper--wide split split--responsive">
+		
+		<span>Theme by <a href="http://github.com/justpsvm">justpsvm</a>. Powered by <a href="http://hexo.io">Hexo</a></span>
+	</div>
+</footer>
+
+	<!-－这里导入了 lib.js 里面涵盖了 jQuery 等框架 所以注释掉-->
+	<!--<script src="http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js"></script>-->
+	<script src="/js/lib.js"></script>
+	<script src="/js/google-code-prettify/prettify.js"></script>
+	<script src="/js/module.js"></script>
+	<script src="/js/script.js"></script>
+	
+	<script type="text/javascript">
+		//代码高亮
+		$(document).ready(function(){
+	 		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   			prettyPrint();
+		});
+	</script>
+	
+
